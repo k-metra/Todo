@@ -1,12 +1,42 @@
-import { useState } from "react";
+import { use, useState } from "react";
 
 export default function AuthForm({type="Login"}) {
     const [credentials, setCredentials] = useState({ username: "", password: "" });
+    const [processing, setProcessing] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-    }
+        setProcessing(true);
+
+        const endpoint = type === "Login" ? "http://localhost:8000/auth/login/" : "http://localhost:8000/auth/register/";
+        
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            })
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Something went wrong');
+            } else {
+                const data = await response.json();
+                console.log(data);
+
+                localStorage.setItem('session_token', data.session_token);
+                localStorage.setItem('username', data.username);
+            }
+
+        } catch (Exception) {
+            console.error('Error:', Exception);
+            }
+
+        setProcessing(false);
+    } 
 
     return (
         <>
@@ -43,13 +73,21 @@ export default function AuthForm({type="Login"}) {
                             setCredentials({...credentials, password: e.target.value})
                         } />
                     </div>
-
+                    
+                    {type === "Login" &&
                     <div className="flex justify-end text-sm decoration-neutral-400">
-                        <a href="#" className="text-xs text-black/80 hover:underline">Forgot Password?</a>
-                    </div>
+                        <a href="/register/" className="text-xs text-black/80 hover:underline">Sign Up</a>
+                    </div> }
+
+                    {type === "Register" && <div className="flex justify-end text-sm decoration-neutral-400">
+                        <a href="/login/" className="text-xs text-black/80 hover:underline">Have an account?</a>
+                    </div>}
+                    
 
                     <div className="buttons flex justify-center items-center padding-2 min-w-full">
-                        <button type="submit" className="px-3.5 py-2.5 mt-2 min-w-[60%] text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 transition-colors-transform duration-200 ease-out hover:-translate-y-1">
+                        <button type="submit" className="px-3.5 py-2.5 mt-2 min-w-[60%] text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 transition-colors-transform duration-200 ease-out hover:-translate-y-1
+                        disabled:text-white-50/40 disabled:bg-blue-600/50 disabled:cursor-not-allowed"
+                        disabled={processing}>
                             {type}
                         </button>
                     </div>
