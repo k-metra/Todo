@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Login from './pages/login';
 import Register from './pages/register';
+import Home from './pages/home';
 
 async function verifyToken(token) {
   let verified = false;
@@ -46,7 +47,7 @@ const PublicRoute = ({ children }) => {
 
   }, [])
 
-  return !isAuthenticated ? children : <p>I'm dying</p>;
+  return !isAuthenticated ? children : <Home />;
 }
 
 const PrivateRoute = ({ children }) => {
@@ -86,7 +87,7 @@ function App() {
 
           <Route path="/home/" element={
             <PrivateRoute>
-              <p>I'm dying</p>
+              <Home />
             </PrivateRoute>
           } />
         </Routes>
