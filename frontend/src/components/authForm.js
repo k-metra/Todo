@@ -1,8 +1,11 @@
 import { use, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthForm({type="Login"}) {
     const [credentials, setCredentials] = useState({ username: "", password: "" });
     const [processing, setProcessing] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,6 +25,7 @@ export default function AuthForm({type="Login"}) {
 
             if (!response.ok) {
                 const errorData = await response.json();
+                setError(errorData.error || 'Something went wrong');
                 throw new Error(errorData.error || 'Something went wrong');
             } else {
                 const data = await response.json();
@@ -29,10 +33,13 @@ export default function AuthForm({type="Login"}) {
 
                 localStorage.setItem('session_token', data.session_token);
                 localStorage.setItem('username', data.username);
+
+                navigate('/home');
             }
 
         } catch (Exception) {
             console.error('Error:', Exception);
+            setError(Exception.message);
             }
 
         setProcessing(false);
@@ -44,7 +51,7 @@ export default function AuthForm({type="Login"}) {
                 <div>
                     <h2 className="text-2xl font-semibold">{type}</h2>
                 </div>
-
+                    {error && <p className="text-red-500 text-center self-center text-sm">{error}</p>}
                 <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                     <div className="flex flex-col gap-1 text-sm">
                         <label className="text-black/70 text-[13px]" htmlFor="username">Username</label>
