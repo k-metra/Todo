@@ -101,4 +101,24 @@ def verify_session(request):
     except Session.DoesNotExist:
         return Response({'success': False, 'error': 'Invalid session token'}, status=401)
 
+@api_view(['POST'])
+def logout_api(request):
+    token = request.data.get('session_token')
 
+    if not token:
+        print("Token doesn't exist")
+        return Response({'success': False,'error': 'Token is required'}, status=400)
+    
+    try:
+        session = Session.objects.get(session_token=token)
+        print("Fetching session")
+
+        if session:
+            session.delete()
+            print("Session deleted")
+            return Response({'success': True, 'message': 'Logout successful'}, status=200)
+
+    except Session.DoesNotExist:
+        print("Session doesn't exist.")
+        return Response({'success': False, 'error': 'Invalid session token'}, status=401)
+    return Response({'success': False, 'error': 'Invalid session token'}, status=401)
