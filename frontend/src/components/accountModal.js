@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function AccountModal() {
     const [username, setUsername] = useState("USERNAME NOT FOUND");
+    const navigate = useNavigate();
 
     function handleLogout(e) {
         e.preventDefault();
@@ -21,7 +23,7 @@ export default function AccountModal() {
             }).then(response => {
                 if (response.status === 200) { 
                     localStorage.removeItem("session_token");
-                    window.location.replace("/login/");
+                    navigate("/login");
                 } else {
                     console.error("Something went wrong trying to log out.")
                     response.json().then(data => console.error(data.error) );
@@ -29,7 +31,7 @@ export default function AccountModal() {
             })
         } else {
             console.log("You can't log out without a token!");
-            window.location.replace("/login/");
+            navigate("/login/");
         }
     }
 
