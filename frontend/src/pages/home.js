@@ -1,15 +1,28 @@
 import Icon from '../components/icon';
 import { useState, useEffect } from 'react';
+import AccountModal from '../components/accountModal';
 
 export default function Home() {
     const [username, setUsername] = useState("");
+    const [showAccountModal, setShowAccountModal] = useState(false);
 
     useEffect(() => {
         setUsername(localStorage.getItem("username") || "User Not Found");
     }, [])
 
     function handleClick() {
+        setShowAccountModal(!showAccountModal);
 
+        const accountModal = document.getElementById("accountModal");
+        if (!accountModal) return;
+        accountModal.style.opacity = showAccountModal ? "1" : "0";
+        accountModal.style.zIndex = showAccountModal ? "50" : "0";
+
+        const buttons = accountModal.getElementsByTagName("a");
+
+        for (let button of buttons) {
+            button.style.pointerEvents = showAccountModal ? "auto" : "none";
+        }
     }
 
     return (
@@ -35,6 +48,8 @@ export default function Home() {
                 </div>
                 
             </div>
+
+            <AccountModal />
         </>
     )
 }
