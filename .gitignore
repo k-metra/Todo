@@ -75,3 +75,5 @@ coverage/
 .env.development.local
 .env.test.local
 .env.production.local
+db.sqlite3
+*.pyc
