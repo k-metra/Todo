@@ -30,7 +30,7 @@ export default function Home() {
                 <div className="right-half pr-5 flex flex-row gap-4 items-center justify-end">
                     
                     <div className="userContainer">
-                        <a onClick={handleClick} className="text-black/70 text-sm hidden md:inline cursor-pointer hover:font-semibold">{username}</a>
+                        <a onClick={handleClick} className="text-black/70 text-sm hidden md:inline cursor-pointer hover:font-semibold"><Icon className="mr-2" icon="fa-solid fa-user" />{username}</a>
                     </div>
                 </div>
                 
