@@ -34,7 +34,7 @@ export default function AuthForm({type="Login"}) {
                 localStorage.setItem('session_token', data.session_token);
                 localStorage.setItem('username', data.username);
 
-                navigate('/home');
+                window.location.reload();
             }
 
         } catch (Exception) {
