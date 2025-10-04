@@ -6,6 +6,8 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
 
+import LoadingRing from './components/loadingRing';
+
 async function verifyToken(token) {
   let verified = false;
 
@@ -32,67 +34,67 @@ async function verifyToken(token) {
       return verified;
     }
 
-const PublicRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+const PublicRoute = ({ children, authenticated }) => {
 
-  useEffect(() => {
-    const token = localStorage.getItem("session_token")
-
-    if (!token) {
-      setIsAuthenticated(false);
-    } else {
-      verifyToken(token)
-      .then(isValid => setIsAuthenticated(isValid));
-    }
-
-  }, [])
-
-  return !isAuthenticated ? children : <Home />;
+  return !authenticated ? children : <Home />;
 }
 
-const PrivateRoute = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("session_token")
-
-    if (!token) {
-      setIsAuthenticated(false);
-    } else {
-      verifyToken(token)
-      .then(isValid => setIsAuthenticated(isValid));
-    }
-
-  }, [])
-
-  return isAuthenticated ? children : <Login />;
+const PrivateRoute = ({ children, authenticated }) => {
+  return authenticated ? children : <Login />;
 }
 
 function App() {
+  const [loading, setLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("session_token")
+
+    if (!token) {
+      setLoading(false);
+      setAuthenticated(false);
+      console.log("No session token found, user is not authenticated.");
+    } else {
+      verifyToken(token)
+      .then((valid) => {
+        console.log(`Value: ${valid}`);
+        setAuthenticated(valid);
+      });
+    }
+
+    if (loading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1000);
+    }
+  }, [])
+
   return (
-    <div className="App">
+    loading ? <LoadingRing /> : (
+      <div className="App">
       <Router>
         <Routes>
           <Route path="/login/" element={
-            <PublicRoute>
+            <PublicRoute authenticated={authenticated}>
               <Login />
             </PublicRoute>
           } />
 
           <Route path="/register/" element={
-            <PublicRoute>
+            <PublicRoute authenticated={authenticated}>
               <Register />
             </PublicRoute>
           } />
 
           <Route path="/home/" element={
-            <PrivateRoute>
+            <PrivateRoute authenticated={authenticated}>
               <Home />
             </PrivateRoute>
           } />
         </Routes>
       </Router>
     </div>
+    )
   );
 }
 
