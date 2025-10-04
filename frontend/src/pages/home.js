@@ -1,10 +1,14 @@
 import Icon from '../components/icon';
 import { useState, useEffect } from 'react';
 import AccountModal from '../components/accountModal';
+import Sidebar from '../components/sidebar';
 
 export default function Home() {
     const [username, setUsername] = useState("");
     const [showAccountModal, setShowAccountModal] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+
+    const [searchQuery, setQuery] = useState("");
 
     useEffect(() => {
         setUsername(localStorage.getItem("username") || "User Not Found");
@@ -27,9 +31,9 @@ export default function Home() {
 
     return (
         <>
-            <div className="header left-0 top-0 border-b border-black/20 p-3 fixed w-screen flex flex-row justify-between items-center">
+            <div className="header left-0 top-0 border-b border-black/20 p-3 fixed h-16 w-screen flex flex-row justify-between items-center">
                 <div className="left-half flex flex-row gap-1 items-center justify-center">
-                    <button className="p-2 w-[56px] h-[56px] hover:bg-black/5 transition-colors duration-200 ease-out rounded-full">
+                    <button onClick={() => setSidebarOpen(!sidebarOpen)} className="p-2 w-[56px] h-[56px] hover:bg-black/5 transition-colors duration-200 ease-out rounded-full">
                         <Icon className="text-[18px] text-black/80" icon="fa-solid fa-bars" />
                     </button>
 
@@ -47,6 +51,14 @@ export default function Home() {
                     </div>
                 </div>
                 
+            </div>
+
+            <Sidebar isOpen={sidebarOpen} />
+
+            <div id="mainContent" className={`pt-16 transition-all duration-300 ease-in-out justify-center flex flex-col items-center ${sidebarOpen ? 'pl-44' : 'pl-15'}`}>
+                <div id="createNotebar" className="flex flex-col w-full items-center">
+                    <textarea className="w-[90%] lg:w-[50%] md:w-[80%] sm:w-[20%] mt-10 p-3 rounded-md border border-black/20 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 ease-out min-h-[10px]" placeholder="Create a new note..."></textarea>
+                </div>
             </div>
 
             <AccountModal />
