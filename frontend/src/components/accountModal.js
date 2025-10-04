@@ -23,7 +23,7 @@ export default function AccountModal() {
             }).then(response => {
                 if (response.status === 200) { 
                     localStorage.removeItem("session_token");
-                    navigate("/login");
+                    window.location.reload();
                 } else {
                     console.error("Something went wrong trying to log out.")
                     response.json().then(data => console.error(data.error) );
@@ -31,7 +31,7 @@ export default function AccountModal() {
             })
         } else {
             console.log("You can't log out without a token!");
-            navigate("/login/");
+            window.location.reload()
         }
     }
 
