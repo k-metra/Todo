@@ -31,8 +31,8 @@ export default function AuthForm({type="Login"}) {
                 const data = await response.json();
                 console.log(data);
 
-                localStorage.setItem('session_token', data.session_token);
-                localStorage.setItem('username', data.username);
+                sessionStorage.setItem('session_token', data.session_token);
+                sessionStorage.setItem('username', data.username);
 
                 window.location.reload();
             }
