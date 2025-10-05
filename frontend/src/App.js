@@ -48,7 +48,7 @@ function App() {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("session_token")
+    const token = sessionStorage.getItem("session_token")
 
     if (!token) {
       setLoading(false);
