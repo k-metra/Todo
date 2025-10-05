@@ -8,10 +8,10 @@ export default function AccountModal() {
     function handleLogout(e) {
         e.preventDefault();
 
-        const token = localStorage.getItem("session_token");
-        const username = localStorage.getItem("username");
+        const token = sessionStorage.getItem("session_token");
+        const username = sessionStorage.getItem("username");
 
-        if (username) localStorage.removeItem("username");
+        if (username) sessionStorage.removeItem("username");
 
         if (token) {
             fetch ("http://localhost:8000/auth/logout/", {
@@ -22,7 +22,7 @@ export default function AccountModal() {
                 body: JSON.stringify({ "session_token": token })
             }).then(response => {
                 if (response.status === 200) { 
-                    localStorage.removeItem("session_token");
+                    sessionStorage.removeItem("session_token");
                     window.location.reload();
                 } else {
                     console.error("Something went wrong trying to log out.")
@@ -36,10 +36,10 @@ export default function AccountModal() {
     }
 
     useEffect(() => {
-        const localUser = localStorage.getItem("username");
+        const localUser = sessionStorage.getItem("username");
 
         if (!localUser) {
-            console.warn("Could not find username from localStorage.");
+            console.warn("Could not find username from sessionStorage.");
         } else {
             setUsername(localUser);
         }
