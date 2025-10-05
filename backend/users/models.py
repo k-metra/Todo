@@ -29,7 +29,7 @@ class Session(models.Model):
         return token
 
     @classmethod
-    def create_session(cls, user, expiry=24):
+    def create_session(cls, user, expiry=12):
         expiry_time = datetime.now() + timedelta(hours=expiry)
         token = cls.generate_token()
         
