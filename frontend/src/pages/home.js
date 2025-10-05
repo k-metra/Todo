@@ -3,15 +3,18 @@ import { useState, useEffect } from 'react';
 import AccountModal from '../components/accountModal';
 import Sidebar from '../components/sidebar';
 
+import Notes from './homepages/notes';
+
 export default function Home() {
     const [username, setUsername] = useState("");
     const [showAccountModal, setShowAccountModal] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [selectedTab, setSelectedTab] = useState("Notes");
 
     const [searchQuery, setQuery] = useState("");
 
     useEffect(() => {
-        setUsername(localStorage.getItem("username") || "User Not Found");
+        setUsername(sessionStorage.getItem("username") || "User Not Found");
     }, [])
 
     function handleClick() {
@@ -53,12 +56,11 @@ export default function Home() {
                 
             </div>
 
-            <Sidebar isOpen={sidebarOpen} />
+            <Sidebar isOpen={sidebarOpen} selectedTab={selectedTab} onClick={(e) => setSelectedTab(e.target.getAttribute('aria-label'))} />
 
             <div id="mainContent" className={`pt-16 transition-all duration-300 ease-in-out justify-center flex flex-col items-center ${sidebarOpen ? 'pl-44' : 'pl-15'}`}>
-                <div id="createNotebar" className="flex flex-col w-full items-center">
-                    <textarea className="w-[90%] lg:w-[50%] md:w-[80%] sm:w-[20%] mt-10 p-3 rounded-md border border-black/20 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 ease-out min-h-[10px]" placeholder="Create a new note..."></textarea>
-                </div>
+                { selectedTab === "Notes" && <Notes /> }
+                
             </div>
 
             <AccountModal />
