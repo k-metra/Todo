@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearch } from '../../contexts/SearchContext';
 
 import Divider from "../../components/divider";
 import Note from "../../components/note";
@@ -9,6 +10,8 @@ import getCsrf from "../../utils/getCsrf";
 export default function Notes() {
     const [fetchedNotes, setFetchedNotes] = useState([])
     const [focused, setFocused] = useState(false);
+
+    const { searchQuery } = useSearch();
 
     const handleUnfocus = (e) => {
         if (e.relatedTarget && e.relatedTarget.id === "noteTitle") {
@@ -21,8 +24,6 @@ export default function Notes() {
     }
 
     useEffect(() => {
-        const csrfToken = getCsrf();
-
         const token = sessionStorage.getItem("session_token");
         if (!token) {
             alert("You must be logged in to view notes.");
@@ -30,8 +31,16 @@ export default function Notes() {
             return;
         }
 
+        let endpoint = 'http://localhost:8000/note/notes/get?session_token=' + token;
+        
+
+        if (searchQuery && searchQuery.trim() !== "") {
+            endpoint += `&search=${encodeURIComponent(searchQuery.trim())}`;
+            console.log("Query changed");
+        }
+
         async function fetchNotes() {
-            await fetch('http://localhost:8000/note/notes/get?session_token=' + token, {
+            await fetch(endpoint, {
                 method: 'GET',
             }).then(response => {
                 if (!response.ok) {
@@ -50,7 +59,7 @@ export default function Notes() {
         }
 
         fetchNotes();
-    }, []);
+    }, [searchQuery]);
     
     async function createNote() {
         const title = document.getElementById("noteTitle").value;
