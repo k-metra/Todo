@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 # Create your views here.
 @api_view(['POST'])
-@csrf_exempt
+@requires_csrf_token
 def note_list(request):
     print("received request")
     print("Request method:", request.method)
