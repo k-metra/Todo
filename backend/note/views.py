@@ -13,17 +13,11 @@ from rest_framework.response import Response
 @api_view(['POST'])
 @requires_csrf_token
 def note_list(request):
-    print("received request")
-    print("Request method:", request.method)
-    print("Request data:", request.data)
-    
     token = request.data.get('session_token')
     if not token:
-        print("Token wasn't sent")
         return Response({"success": False, "message": "Authentication token is required."}, status=401)
     
     if request.method == "POST":
-        print("Processing POST request")
         print("Token received:", token)
         
         try:
