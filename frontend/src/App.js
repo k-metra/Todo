@@ -6,6 +6,8 @@ import Login from './pages/login';
 import Register from './pages/register';
 import Home from './pages/home';
 
+import { SearchProvider } from './contexts/SearchContext';
+
 import LoadingRing from './components/loadingRing';
 
 async function verifyToken(token) {
@@ -67,7 +69,7 @@ function App() {
         setLoading(false);
       }, 1000);
     }
-  }, [])
+  }, [loading])
 
   return (
     loading ? <LoadingRing /> : (
@@ -88,7 +90,9 @@ function App() {
 
           <Route path="/home/" element={
             <PrivateRoute authenticated={authenticated}>
-              <Home />
+              <SearchProvider>
+                <Home />
+              </SearchProvider>
             </PrivateRoute>
           } />
         </Routes>
