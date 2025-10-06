@@ -1,7 +1,10 @@
 import Icon from '../components/icon';
 import { useState, useEffect } from 'react';
+import { useSearch } from '../contexts/SearchContext';
+
 import AccountModal from '../components/accountModal';
 import Sidebar from '../components/sidebar';
+
 
 import Notes from './homepages/notes';
 
@@ -11,7 +14,7 @@ export default function Home() {
     const [sidebarOpen, setSidebarOpen] = useState(true);
     const [selectedTab, setSelectedTab] = useState("Notes");
 
-    const [searchQuery, setQuery] = useState("");
+    const { setSearchQuery } = useSearch();
 
     useEffect(() => {
         setUsername(sessionStorage.getItem("username") || "User Not Found");
@@ -44,13 +47,13 @@ export default function Home() {
                 </div>
 
                 <div className="middle-half block lg:w-[45%] md:w-[35%]">
-                    <input type="text" placeholder="Search..." className="px-3 py-2 rounded-md border border-black/20 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 ease-out min-w-[300px] w-full" />
+                    <input onChange={(e) => setSearchQuery(e.target.value)} type="text" placeholder="Search..." className="px-3 py-2 rounded-md border border-black/20 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 ease-out min-w-[300px] w-full" />
                 </div>
 
                 <div className="right-half pr-5 flex flex-row gap-4 items-center justify-end">
                     
                     <div className="userContainer">
-                        <a onClick={handleClick} className="text-black/70 text-sm hidden md:inline cursor-pointer hover:font-semibold"><Icon className="mr-2" icon="fa-solid fa-user" />{username}</a>
+                        <button onClick={handleClick} className="text-black/70 text-sm hidden md:inline cursor-pointer hover:font-semibold"><Icon className="mr-2" icon="fa-solid fa-user" />{username}</button>
                     </div>
                 </div>
                 
