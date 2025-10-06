@@ -103,3 +103,7 @@ yarn-debug.log*
 yarn-error.log*
 
 *.pyc
+
+backend\__pycache__\
+backend\env\
+/migrations
