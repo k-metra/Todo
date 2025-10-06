@@ -105,3 +105,4 @@ def note_detail(request):
         
         note.delete()
         return Response({"success": True, "message": "Note deleted successfully."}, status=200)
+    # TODO: Add update and search query functionality
