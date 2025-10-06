@@ -54,6 +54,7 @@ def note_list(request):
 def notes(request):
     print("Notes GET endpoint accessed")
     session_token = request.GET.get('session_token')
+    query = request.GET.get('search', '').strip()
     print("Session token:", session_token)
     
     if not session_token:
@@ -70,7 +71,11 @@ def notes(request):
         return Response({"success": False, "message": "Session does not exist."}, status=401)
     
     if request.method == 'GET':
-        notes_queryset = Note.objects.filter(user=account).order_by('-created_at')
+        if query:
+            print("Search query received:", query)
+            notes_queryset = Note.objects.filter(user=account, title__icontains=query).order_by('-created_at')
+        else:
+            notes_queryset = Note.objects.filter(user=account).order_by('-created_at')
         serialized = NoteSerializer(notes_queryset, many=True)
         return Response(serialized.data, status=200)
         
