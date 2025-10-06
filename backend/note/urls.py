@@ -3,5 +3,6 @@ from .views import *
 
 urlpatterns = [
     path("notes/", view=note_list, name="note_list"),
-    path("notes/<int:note_id>/", view=note_detail, name="note_detail")
+    path("notes/get/", view=notes, name="notes"),  # This will handle GET with query params
+    path("notes/edit/", view=note_detail, name="note_detail")
 ]
