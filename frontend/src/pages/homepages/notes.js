@@ -123,7 +123,7 @@ export default function Notes() {
             </div>
             <Divider />
 
-            <div id="notes-grid" className="w-full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4">
+            <div id="notes-grid" className={`w-full grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-4 p-4`}>
                 { fetchedNotes.map((note) => (
                     <Note key={note.id} note_id={note.id} id={`${note.id}`} title={note.title} content={note.content} date={new Date(note.created_at)} onClick={() => alert("Note clicked!")} />
                 )) }
