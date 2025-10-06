@@ -61,7 +61,7 @@ export default function Home() {
 
             <Sidebar isOpen={sidebarOpen} selectedTab={selectedTab} onClick={(e) => setSelectedTab(e.target.getAttribute('aria-label'))} />
 
-            <div id="mainContent" className={`pt-16 transition-all duration-300 ease-in-out justify-center flex flex-col items-center ${sidebarOpen ? 'pl-44' : 'pl-15'}`}>
+            <div id="mainContent" className={`pt-16 transition-all duration-300 ease-in-out justify-center flex flex-col items-center ${sidebarOpen ? 'pl-44' : 'pl-20'}`}>
                 { selectedTab === "Notes" && <Notes /> }
                 
             </div>
