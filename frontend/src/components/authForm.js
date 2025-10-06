@@ -1,11 +1,9 @@
-import { use, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function AuthForm({type="Login"}) {
     const [credentials, setCredentials] = useState({ username: "", password: "" });
     const [processing, setProcessing] = useState(false);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
