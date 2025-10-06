@@ -25,7 +25,10 @@ def login_api(request):
         session = Session.objects.filter(user=user).first()
 
         if session:
-            session.create_session(user)
+            session.delete()
+            session = Session.create_session(user=user)
+
+            print("Created new session for login:", session.session_token)
 
             return Response(
                 {'success': True,
@@ -33,8 +36,10 @@ def login_api(request):
                  'username': user.username,
                  'session_token': session.session_token,}
             )
+            
         else:
             session = Session.create_session(user)
+            print("Session not found. Created new one:", session.session_token)
             return Response(
                 {'success': True,
                  'message': 'Login successful',
@@ -89,14 +94,17 @@ def verify_session(request):
         session = Session.objects.get(session_token=token)
 
         if not session:
+            print("No session token found")
             return Response({'success': False, 'error': 'Invalid session token'}, status=401)
         
         expires_at = session.expires_at
 
         if expires_at < timezone.now():
             session.delete()
+            print("session expired for:", session.session_token)
             return Response({'success': False, 'error': 'Session has expired'}, status=401)
         else:
+            print("Session token:", session.session_token, "is valid.")
             return Response({'success': True, 'message': 'Session is valid', 'username': session.user.username}, status=200)
     except Session.DoesNotExist:
         return Response({'success': False, 'error': 'Invalid session token'}, status=401)
